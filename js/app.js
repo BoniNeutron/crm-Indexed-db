@@ -3,7 +3,9 @@
     let DB;
 
     document.addEventListener('DOMContentLoaded', () => {
+
         crearDB();
+
     });
     
     // CREA LA BASE DE DATOS
@@ -12,10 +14,12 @@
         const crearDB = window.indexedDB.open('crm', 1);
 
         crearDB.onerror = function() {
+
             console.log('Hubo un error');
         }
 
         crearDB.onsuccess = function() {
+
             DB = crearDB.result;
         }
 
@@ -31,9 +35,10 @@
             objectStore.createIndex('empresa', 'empresa', {unique: false});
             objectStore.createIndex('id', 'id', {unique: true});
 
-            console.log('DB Listo');
+            console.log('DB Lista');
 
         }
-
+        
     }
+    
 })();
