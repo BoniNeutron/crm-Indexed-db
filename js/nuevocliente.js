@@ -5,27 +5,11 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
-        conectarDB();
         formulario.addEventListener('submit', validarCliente);
 
+        conectarDB();
+
     })
-
-    function conectarDB() {
-
-        const abrirConexion = window.indexedDB.open('crm', 1);
-
-        abrirConexion.onerror = function() {
-
-            console.log('Hubo un error');
-        }
-
-        abrirConexion.onsuccess = function() {
-
-            DB = abrirConexion.result;
-
-        }
-
-    }
 
     function validarCliente(evento) {
 
@@ -56,27 +40,25 @@
 
         }
 
-        console.log(cliente);
-
         crearNuevoCliente(cliente);
 
     }
 
     function crearNuevoCliente(cliente) {
 
-        const transaction = DB.transaction(['crm'], 'readwrite');
+        const trans = DB.transaction(['crm'], 'readwrite');
 
-        const objectStore = transaction.objectStore('crm');
+        const objectStore = trans.objectStore('crm');
 
         objectStore.add(cliente);
 
-        transaction.onerror = function() {
+        trans.onerror = function() {
 
             imprimirAlerta('Hubo un error', 'error');
 
         }
 
-        transaction.oncomplete = function() {
+        trans.oncomplete = function() {
 
             imprimirAlerta('El cliente se agrego correctamente');
 
@@ -85,38 +67,6 @@
             }, 3000);
 
         }        
-
-    }
-
-    function imprimirAlerta(mensaje, tipo) {
-
-        const alerta = document.querySelector('.alerta');
-
-        if(!alerta) {
-           
-            // CREAR LA ALERTA
-            const divMensaje = document.createElement('div');
-            divMensaje.classList.add('px-4', 'py-3', 'rounded', 'max-w-lg', 'mx-auto', 'mt-6', 'text-center', 'border', 'alerta');
-
-            if(tipo === 'error') {
-
-                divMensaje.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-            
-            } else {
-
-                divMensaje.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
-
-            }
-
-            divMensaje.textContent = mensaje;
-
-            formulario.appendChild(divMensaje);
-
-            setTimeout(() => {
-                divMensaje.remove();
-            }, 3000);
-
-        }
 
     }
 
